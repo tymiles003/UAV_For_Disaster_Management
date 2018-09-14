@@ -1,4 +1,4 @@
-![alt text](https://github.com/Ayushmaniar/Help_from_the_sky_2/blob/master/hack_6.jpeg)
+![alt text](media/hack_6.jpeg)
 # Team "Eye in the Sky "
 **We have an inter-disciplinary project going on in CFI which is in collaboration with CVI and Aero club.**
 
