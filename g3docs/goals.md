@@ -44,4 +44,4 @@ What we want done by 20th Oct.
 
 1) Getting the live gps coordinates
 
-2) findinf a better altern
+2) finding a better alternative for camera (using RPI USB Webcam as of now)
