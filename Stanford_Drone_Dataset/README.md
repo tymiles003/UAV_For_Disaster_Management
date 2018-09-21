@@ -18,6 +18,7 @@ Use these commands to download the dataset
 ```
 
 ## As of now we have uploaded a python script to visualize the ground truth results in the dataset
+### Note : We have optimised this code such that we dont have to go through the entire 36000 or some line in our annotations.txt file but only through the lines corresponding to the frame number.
 ### (PS : They are very noisy and have a lot of false annotations)
 
 **Here are the results of our code**
