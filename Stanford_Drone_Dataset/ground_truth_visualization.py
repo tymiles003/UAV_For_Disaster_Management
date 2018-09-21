@@ -1,5 +1,6 @@
 import cv2
 import time
+
 video_path = "./Videos/deathCircle/video0/video.mov"
 
 cap = cv2.VideoCapture(video_path)
