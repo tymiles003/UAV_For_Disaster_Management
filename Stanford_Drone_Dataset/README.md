@@ -20,7 +20,7 @@ Use these commands to download the dataset
 ####(PS : They are very noisy and have a lot of false annotations)
 
 **Here are the results of our code**
-[!alt text](media/ground_truth_ouput.png)
+![alt text](media/ground_truth_ouput.png)
 
 ### Next we will upload the code we have written for converting the annotations.txt file to Tf-Records file. 
 
