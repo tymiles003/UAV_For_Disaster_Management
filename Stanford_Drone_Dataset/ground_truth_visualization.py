@@ -1,6 +1,6 @@
 import cv2
 import time
-video_path = "./Videos/little/video0/video.mov"
+video_path = "./Videos/bookstore/video0/video.mov"
 
 cap = cv2.VideoCapture(video_path)
 
@@ -8,7 +8,7 @@ ret = True
 
 frame_number = 0
 
-annotation_file_path = "./annotations/" + video_path.split("/")[2] + "/" + video_path.split("/")[3] + "/" + "annotations.txt"
+annotation_file_path = "./annotations_rajat.txt"
 
 file_stream = open(annotation_file_path , "r")
 
@@ -18,9 +18,10 @@ cv2.namedWindow("output" , cv2.WINDOW_NORMAL)
 while(ret):
 
     ret , frame = cap.read()
-    boxes = {}
     # file_stream = open(annotation_file_path , "r")
     for line in file_stream:
+        print(line)
+        print(len(line))
         if(int(line.split(" ")[5]) == frame_number):
             # print(frame_number , "Inside at this frame")
 
@@ -29,24 +30,22 @@ while(ret):
             xmax = int(line.split(" ")[3])
             ymax = int(line.split(" ")[4])
 
-            # print(str(line.split(' ')[9]))
-
-            if(str(line.split(" ")[9].split("\"")[1]) == "Biker"):  
+            if(str(line.split(" ")[9]) == "Biker\n"):
                 cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(100 , 0 , 0) , 3)
-            elif(str(line.split(" ")[9].split("\"")[1]) == "Pedestrian"):
+            elif(str(line.split(" ")[9]) == "Pedestrian\n"):
                 cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(0 , 0 , 100) , 3)
-            elif(str(line.split(" ")[9].split("\"")[1]) == "Skater"): 
+            elif(str(line.split(" ")[9]) == "Skater\n"): 
                 cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(100 , 200 , 0) , 3)
-            elif(str(line.split(" ")[9].split("\"")[1]) == "Cart"):  
+            elif(str(line.split(" ")[9]) == "Cart\n"):  
                 cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(100 , 0 , 0) , 3)
-            elif(str(line.split(" ")[9].split("\"")[1]) == "Car"):
-                print("Car found")  
+            elif(str(line.split(" ")[9]) == "Car\n"):
                 cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(100, 0 , 200) , 3)
-            elif(str(line.split(" ")[9].split("\"")[1])== "Bus"):  
+            elif(str(line.split(" ")[9])== "Bus\n"):  
                 cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(0 , 0 , 0) , 3)
-            
-            # print(xmin , ymin , xmax , ymax)
-    file_stream.seek(0)
+
+        else:
+            break
+        
     cv2.putText(frame,
             "FPS: %f" % (1.0 / (time.time() - fps_time)),
             (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
@@ -64,6 +63,8 @@ while(ret):
         break
 
 cv2.destroyAllWindows()
+
+# file_stream.seek()
 
 
 
