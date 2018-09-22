@@ -1,0 +1,9 @@
+/media/ayush/Extra/The_Eternal_Dataset/Videos/quad/video0/video.mov
+/media/ayush/Extra/The_Eternal_Dataset/Videos/quad/video1/video.mov
+/media/ayush/Extra/The_Eternal_Dataset/Videos/quad/video2/video.mov
+/media/ayush/Extra/The_Eternal_Dataset/Videos/quad/video3/video.mov
+/media/ayush/Extra/The_Eternal_Dataset/Videos/bookstore/video0/video.mov
+/media/ayush/Extra/The_Eternal_Dataset/Videos/bookstore/video1/video.mov
+/media/ayush/Extra/The_Eternal_Dataset/Videos/bookstore/video2/video.mov
+/media/ayush/Extra/The_Eternal_Dataset/Videos/bookstore/video3/video.mov
+
