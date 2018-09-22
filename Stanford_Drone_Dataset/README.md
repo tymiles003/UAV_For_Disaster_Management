@@ -21,12 +21,14 @@ Use these commands to download the dataset
 ### Note : We have optimised this code such that we dont have to go through the entire 36000 or some line in our annotations.txt file but only through the lines corresponding to the frame number.
 ### (PS : They are very noisy and have a lot of false annotations)
 
+## Also we have now uploaded a python script for converting the annotations.txt file to Tf-Records file which is taken as a standard input for tensorflow object detection API
+
 **Here are the results of our code**
 
 
 ![alt text](../media/ground_truth_ouput.png)
 
-### Next we will upload the code we have written for converting the annotations.txt file to Tf-Records file. 
+### Next we will write a python wrapper on top of create_tf_records.py so that it can scan through our entire dataset and save it in one tf-records file. (or maybe we can have a train-test-val split over here)
 
 
 
