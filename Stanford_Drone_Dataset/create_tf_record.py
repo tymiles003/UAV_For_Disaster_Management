@@ -21,7 +21,7 @@ def _bytes_feature(value):
     """
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
-def create_tf_example(examples_per_frame , cap , frame) :
+def create_tf_example(examples_per_frame , cap , path) :
     
     # Bosch
     height = int(cap.get(3))
@@ -30,8 +30,8 @@ def create_tf_example(examples_per_frame , cap , frame) :
     # filename = example['path'] # Filename of the frame. Empty if frame is not from file
     # filename = filename.encode()
 
-    # with tf.gfile.GFile(example['path'], 'rb') as fid:
-    #     encoded_frame = fid.read()
+    with tf.gfile.GFile(path, 'rb') as fid:
+        encoded_frame = fid.read()
 
     # frame_format = 'png'.encode() 
             
@@ -62,22 +62,11 @@ def create_tf_example(examples_per_frame , cap , frame) :
             classes.append(int(LABEL_DICT[classes_text[-1]]))
             classes_text[-1] = classes_text[-1].encode()
     
-    '''
-    for box in example['boxes']:
-        #if box['occluded'] is False:
-        #print("adding box")
-        xmins.append(float(box['x_min'] / width))
-        xmaxs.append(float(box['x_max'] / width))
-        ymins.append(float(box['y_min'] / height))
-        ymaxs.append(float(box['y_max'] / height))
-        classes_text.append(box['label'].encode())
-        classes.append(int(LABEL_DICT[box['label']]))
-    '''
 
     tf_example = tf.train.Example(features=tf.train.Features(feature={
         'frame/height': dataset_util.int64_feature(height),
         'frame/width': dataset_util.int64_feature(width),
-        'frame/encoded': _bytes_feature(tf.compat.as_bytes(frame.tostring())),
+        'frame/encoded': dataset_util.bytes_feature(encoded_frame),
         'frame/object/bbox/xmin': dataset_util.float_list_feature(xmins),
         'frame/object/bbox/xmax': dataset_util.float_list_feature(xmaxs),
         'frame/object/bbox/ymin': dataset_util.float_list_feature(ymins),
@@ -85,9 +74,6 @@ def create_tf_example(examples_per_frame , cap , frame) :
         'frame/object/class/text': dataset_util.bytes_list_feature(classes_text),
         'frame/object/class/label': dataset_util.int64_list_feature(classes),
     }))
-
-    ##############################################################################
-    ##############################################################################
 
     return tf_example
 
@@ -99,18 +85,20 @@ def main(_):
     cap = cv2.VideoCapture("/media/ayush/Extra/The_Eternal_Dataset/Videos/quad/video1/video.mov")
     ret = True
     frame_number = 0
+    path ="/media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg"
     while(ret):
         ret , frame = cap.read()
         # print(frame)
-        examples_per_frame = [] 
-
+        examples_per_frame = []
+        cv2.imwrite(path , frame)
         file_stream = open("/media/ayush/Extra/The_Eternal_Dataset/annotations/quad/video1/annotations.txt","r")
         for line in file_stream:
             print(line)
             if(int(line.split(",")[5]) == frame_number):
                 examples_per_frame.append(line)
             else:
-                tf_example = create_tf_example(examples_per_frame , cap , frame)
+                tf_example = create_tf_example(examples_per_frame , cap , path)
+                # os.system("rm /media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg")
                 writer.write(tf_example.SerializeToString())
                 break
 
