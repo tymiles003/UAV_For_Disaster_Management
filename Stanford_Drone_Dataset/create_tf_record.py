@@ -82,34 +82,34 @@ def main(_):
     
     writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
 
-    cap = cv2.VideoCapture("/media/ayush/Extra/The_Eternal_Dataset/Videos/quad/video1/video.mov")
-    ret = True
-    frame_number = 0
     path ="/media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg"
+
+    ret = True
+    step = 3
+    frame_number = 0
+    cap = cv2.VideoCapture("/media/ayush/Extra/The_Eternal_Dataset/Videos/quad/video1/video.mov")   
+
     while(ret):
-        ret , frame = cap.read()
-        # print(frame)
+        for i in range(step):
+            ret , frame = cap.read()
+            frame_number+=1
+
+        if(frame_number == step):
+            frame_number -=1
+
         examples_per_frame = []
         cv2.imwrite(path , frame)
         file_stream = open("/media/ayush/Extra/The_Eternal_Dataset/annotations/quad/video1/annotations.txt","r")
         for line in file_stream:
-            print(line)
-            if(int(line.split(",")[5]) == frame_number):
-                examples_per_frame.append(line)
+            if(int(line.split(",")[5]) <= frame_number):
+
+                if(int(line.split(",")[5]) == frame_number):
+                    examples_per_frame.append(line)
             else:
                 tf_example = create_tf_example(examples_per_frame , cap , path)
                 # os.system("rm /media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg")
                 writer.write(tf_example.SerializeToString())
                 break
-
-        
-        frame_number +=1
-        print(frame_number/30)
-
-
-
-        # writer.close()
-
 
 
 if __name__ == '__main__':
