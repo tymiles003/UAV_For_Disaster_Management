@@ -29,6 +29,7 @@ import io
 import logging
 import os
 import cv2
+import time
 
 from lxml import etree
 import PIL.Image
@@ -109,11 +110,11 @@ def create_tf_example(examples_per_frame , cap , path):
     '''
 
     for line in examples_per_frame:
-        if(int(line.split(",")[6]) == 0):
-            xmin.append(int(line.split(",")[1]))
-            ymin.append(int(line.split(",")[2]))
-            xmax.append(int(line.split(",")[3]))
-            ymax.append(int(line.split(",")[4]))
+        if(int(line.split(",")[6]) == 0): 
+            xmin.append(int(line.split(",")[1])/width)
+            ymin.append(int(line.split(",")[2])/height)
+            xmax.append(int(line.split(",")[3])/width)
+            ymax.append(int(line.split(",")[4])/height)
             
             if(str(line.split(",")[9]) == "Biker\n"):
                 class_name = "Biker"
@@ -136,6 +137,7 @@ def create_tf_example(examples_per_frame , cap , path):
             classes.append(int(LABEL_DICT[class_name]))
             truncated.append(0)
             difficult_obj.append(0)
+        
 
     example = tf.train.Example(features=tf.train.Features(feature={
         'image/height': dataset_util.int64_feature(height),
@@ -165,12 +167,14 @@ def main(_):
     writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
 
     path ="/media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg"
-    video_paths = open("/media/ayush/Extra/The_Eternal_Dataset/Tf-Records/path_to_videos_small.txt","r")
+    video_paths = open("/media/ayush/Extra/The_Eternal_Dataset/Tf-Records/research/path_to_videos.txt","r")
     num_videos = 0
+
     for video_path in video_paths:
         num_videos +=1
     video_number = 0
     video_paths.seek(0)
+    start = time.time()
     for video_path in video_paths:
         ret = True
         step = 3
@@ -205,35 +209,15 @@ def main(_):
                     # os.system("rm /media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg")
                     writer.write(tf_example.SerializeToString())
                     break
-
-            print("percentage of video done is {}".format((frame_number/cap.get(7))*100) , end ='\r')
+            if(int((frame_number/cap.get(7))*100) % 5 ==0):
+                print("Video no. {} percentage {} , ".format(video_number,int((frame_number/cap.get(7))*100)) , end ='\r')
 
 
         print("{} is done moving on to the next video".format(video_path))
         os.system("rm /media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg")
-    '''
 
-    for year in years:
-        logging.info('Reading from PASCAL %s dataset.', year)
-        examples_path = os.path.join(data_dir, year, 'ImageSets', 'Main',
-                                        'aeroplane_' + FLAGS.set + '.txt')
-        annotations_dir = os.path.join(data_dir, year, FLAGS.annotations_dir)
-        examples_list = dataset_util.read_examples_list(examples_path)
-        for idx, example in enumerate(examples_list):
-            if idx % 100 == 0:
-                logging.info('On image %d of %d', idx, len(examples_list))
-            path = os.path.join(annotations_dir, example + '.xml')
-            with tf.gfile.GFile(path, 'r') as fid:
-                xml_str = fid.read()
-            xml = etree.fromstring(xml_str)
-            data = dataset_util.recursive_parse_xml_to_dict(xml)['annotation']
-
-            tf_example = dict_to_tf_example(data, FLAGS.data_dir, label_map_dict,
-                                            FLAGS.ignore_difficult_instances)
-            writer.write(tf_example.SerializeToString())
-
-    writer.close()
-    '''
+    end = time.time()
+    print("Total time taken = {} minutes".format((end-start)/60))
 
 if __name__ == '__main__':
     tf.app.run()
