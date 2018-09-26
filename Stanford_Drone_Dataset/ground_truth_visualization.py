@@ -1,7 +1,7 @@
 import cv2
 import time
 
-video_path = "./Videos/deathCircle/video0/video.mov"
+video_path = "./Videos/deathCircle/video1/video.mov"
 
 cap = cv2.VideoCapture(video_path)
 
@@ -37,21 +37,31 @@ while(ret):
             ymax = int(line.split(",")[4])
 
             if(str(line.split(",")[9]) == "Biker\n"):
-                cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(100 , 0 , 0) , 3)
+                if(int(line.split(",")[6]) == 1):
+                    cv2.putText(frame, "lost Biker", (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0) , 2)
+                cv2.rectangle(frame,(xmin - 5 , ymin - 10),(xmax,ymax) ,(100 , 0 , 0) , 3)
             elif(str(line.split(",")[9]) == "Pedestrian\n"):
-                cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(0 , 0 , 100) , 3)
+                if(int(line.split(",")[6]) == 1):
+                    cv2.putText(frame, "lost Pedestrian", (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0) , 2)
+                cv2.rectangle(frame,(xmin - 5 , ymin - 10),(xmax,ymax) ,(0 , 0 , 100) , 3)
             elif(str(line.split(",")[9]) == "Skater\n"): 
-                cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(100 , 200 , 0) , 3)
-            elif(str(line.split(",")[9]) == "Cart\n"):  
-                cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(100 , 0 , 0) , 3)
+                if(int(line.split(",")[6]) == 1):
+                    cv2.putText(frame, "lost Scater", (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0) , 2)
+                cv2.rectangle(frame,(xmin - 5 , ymin - 10),(xmax,ymax) ,(100 , 200 , 0) , 3)
+            elif(str(line.split(",")[9]) == "Cart\n"):
+                if(int(line.split(",")[6]) == 1):
+                    cv2.putText(frame, "lost Cart", (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0) , 2)  
+                cv2.rectangle(frame,(xmin - 5 , ymin - 10),(xmax,ymax) ,(100 , 0 , 0) , 3)
             elif(str(line.split(",")[9]) == "Car\n"):
-                cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(100, 0 , 200) , 3)
-            elif(str(line.split(",")[9])== "Bus\n"):  
-                cv2.rectangle(frame,(xmin,ymin),(xmax,ymax) ,(0 , 0 , 0) , 3)
+                if(int(line.split(",")[6]) == 1):
+                    cv2.putText(frame, "lost Car", (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0) , 2)
+                cv2.rectangle(frame,(xmin - 5 , ymin - 10),(xmax,ymax) ,(100, 0 , 200) , 3)
+            elif(str(line.split(",")[9])== "Bus\n"): 
+                if(int(line.split(",")[6]) == 1):
+                    cv2.putText(frame, "lost Bus", (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0) , 2) 
+                cv2.rectangle(frame,(xmin - 5 , ymin - 10),(xmax,ymax) ,(0 , 0 , 0) , 3)
 
         else:
-
-            file_stream.seek(seek_var - len(line),0)
             break
         
     cv2.putText(frame,
@@ -71,9 +81,3 @@ while(ret):
         break
 
 cv2.destroyAllWindows()
-
-# file_stream.seek()
-
-
-
-
