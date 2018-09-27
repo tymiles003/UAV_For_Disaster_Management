@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     git \
     vim \
     nano \
+    sudo \
     build-essential \
     python3-dev \
     python3-pip \
@@ -47,16 +48,6 @@ RUN mkdir /root/ros_catkin_ws
 
 RUN cd /root/ros_catkin_ws && rosinstall_generator desktop_full --rosdistro kinetic --deps --wet-only --tar > kinetic-desktop-full-wet.rosinstall
 RUN cd /root/ros_catkin_ws && wstool init -j8 src kinetic-desktop-full-wet.rosinstall
-
-RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
-	cd /root/opencv && \
-	mkdir build && \
-	cd build && \
-	cmake -DWITH_QT=ON -DWITH_OPENGL=ON -DFORCE_VTK=ON -DWITH_TBB=ON -DWITH_GDAL=ON -DWITH_XINE=ON -DBUILD_EXAMPLES=ON .. && \
-	make -j4  && \
-	make install && \
-	ldconfig && \
-	echo 'ln /dev/null /dev/raw1394' >> /home/$USERNAME/.bashrc
 
 RUN cd /root/ros_catkin_ws && ./src/catkin/bin/catkin_make_isolated -DPYTHON_VERSION=3.5 \
     --install -DCMAKE_BUILD_TYPE=Release
