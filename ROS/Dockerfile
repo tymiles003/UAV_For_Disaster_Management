@@ -43,10 +43,10 @@ RUN cd /usr/lib/x86_64-linux-gnu && ln -s libboost_python-py35.so libboost_pytho
 RUN rosdep init \
     && rosdep update
 
-RUN mkdir ~/ros_catkin_ws
+RUN mkdir /ros_catkin_ws
 
-RUN cd ~/ros_catkin_ws && rosinstall_generator desktop_full --rosdistro kinetic --deps --wet-only --tar > kinetic-desktop-full-wet.rosinstall
-RUN cd ~/ros_catkin_ws && wstool init -j8 src kinetic-desktop-full-wet.rosinstall
+RUN cd /ros_catkin_ws && rosinstall_generator desktop_full --rosdistro kinetic --deps --wet-only --tar > kinetic-desktop-full-wet.rosinstall
+RUN cd /ros_catkin_ws && wstool init -j8 src kinetic-desktop-full-wet.rosinstall
 
 RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
 	cd /root/opencv && \
@@ -58,5 +58,5 @@ RUN git clone --depth 1 https://github.com/opencv/opencv.git /root/opencv && \
 	ldconfig && \
 	echo 'ln /dev/null /dev/raw1394' >> /home/$USERNAME/.bashrc
 
-RUN cd ~/ros_catkin_ws && ./src/catkin/bin/catkin_make_isolated -DPYTHON_VERSION=3.5 \
+RUN cd /ros_catkin_ws && ./src/catkin/bin/catkin_make_isolated -DPYTHON_VERSION=3.5 \
     --install -DCMAKE_BUILD_TYPE=Release
