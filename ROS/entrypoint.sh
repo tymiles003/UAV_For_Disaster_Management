@@ -3,7 +3,7 @@
 useradd --shell /bin/bash -c "" -m $USERNAME
 
 export HOME=/bome/$USERNAME
-export PATH=/home/$USERNAME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/$USERNAME/local/bin/:/usr/local
+export PATH=/home/$USERNAME/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/$USERNAME/.local/bin/:/usr/local
 
 usermod -aG sudo $USERNAME
 echo "$USERNAME:test" | chpasswd
