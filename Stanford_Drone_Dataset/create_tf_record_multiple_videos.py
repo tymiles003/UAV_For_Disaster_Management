@@ -1,5 +1,4 @@
 import tensorflow as tf
-import yaml
 import os
 from object_detection.utils import dataset_util
 import cv2
@@ -23,7 +22,6 @@ def _bytes_feature(value):
 
 def create_tf_example(examples_per_frame , cap , path) :
     
-    # Bosch
     height = int(cap.get(3))
     width = int(cap.get(4))
 
@@ -83,7 +81,7 @@ def main(_):
     writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
 
     path ="/media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg"
-    video_paths = open("/media/ayush/Extra/The_Eternal_Dataset/Tf-Records/research/path_to_videos.txt","r")
+    video_paths = open("/media/ayush/Extra/The_Eternal_Dataset/Tf-Records/research/path_to_videos_test.txt","r")
     num_videos = 0
     for video_path in video_paths:
         num_videos +=1
@@ -96,6 +94,7 @@ def main(_):
         video_number +=1
         video_path = video_path.replace("\n","")
         cap = cv2.VideoCapture(video_path)
+        print(video_path)
         annotation_file_path = "/media/ayush/Extra/The_Eternal_Dataset/annotations/"+ video_path.split("/")[6] + "/" + video_path.split("/")[7] + "/" + "annotations.txt"
         file_stream = open(annotation_file_path,"r")
         print("="*30)

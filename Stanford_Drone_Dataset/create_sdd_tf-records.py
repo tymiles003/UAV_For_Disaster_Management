@@ -31,7 +31,6 @@ import os
 import cv2
 import time
 
-from lxml import etree
 import PIL.Image
 import tensorflow as tf
 
@@ -104,34 +103,37 @@ def create_tf_example(examples_per_frame , cap , path):
         xmax.append(float(obj['bndbox']['xmax']) / width)
         ymax.append(float(obj['bndbox']['ymax']) / height)
         classes_text.append(obj['name'].encode('utf8'))
-        classes.append(label_map_dict[obj['name']])
+        classe.append(label_map_dict[obj['name']])
         truncated.append(int(obj['truncated']))
         poses.append(obj['pose'].encode('utf8'))
     '''
 
     for line in examples_per_frame:
-        if(int(line.split(",")[6]) == 0): 
-            xmin.append(int(line.split(",")[1])/width)
-            ymin.append(int(line.split(",")[2])/height)
-            xmax.append(int(line.split(",")[3])/width)
-            ymax.append(int(line.split(",")[4])/height)
+        x = line.replace("\n","")
+        x = x.replace("\"","")
+        line = x
+        if(int(line.split(" ")[6]) == 0): 
+            xmin.append(int(line.split(" ")[1])/width)
+            ymin.append(int(line.split(" ")[2])/height)
+            xmax.append(int(line.split(" ")[3])/width)
+            ymax.append(int(line.split(" ")[4])/height)
             
-            if(str(line.split(",")[9]) == "Biker\n"):
+            if(str(line.split(" ")[9]) == "Biker"):
                 class_name = "Biker"
                 classes_text.append("Biker".encode('utf8'))
-            elif(str(line.split(",")[9]) == "Cart\n"):
+            elif(str(line.split(" ")[9]) == "Cart"):
                 class_name = "Cart"
                 classes_text.append("Cart".encode('utf8'))
-            elif(str(line.split(",")[9]) == "Car\n"):
+            elif(str(line.split(" ")[9]) == "Car"):
                 class_name = "Car"
                 classes_text.append("Car".encode('utf8'))           
-            elif(str(line.split(",")[9]) == "Bus\n"):
+            elif(str(line.split(" ")[9]) == "Bus"):
                 class_name = "Bus"
                 classes_text.append("Bus".encode('utf8'))
-            elif(str(line.split(",")[9]) == "Pedestrian\n"):
+            elif(str(line.split(" ")[9]) == "Pedestrian"):
                 class_name = "Pedestrian"
                 classes_text.append("Pedestrian".encode('utf8'))
-            elif(str(line.split(",")[9]) == "Skater\n"):
+            elif(str(line.split(" ")[9]) == "Skater"):
                 class_name = "Skater"
                 classes_text.append("Skater".encode('utf8'))            
             classes.append(int(LABEL_DICT[class_name]))
@@ -166,8 +168,8 @@ def main(_):
 
     writer = tf.python_io.TFRecordWriter(FLAGS.output_path)
 
-    path ="/media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg"
-    video_paths = open("/media/ayush/Extra/The_Eternal_Dataset/Tf-Records/research/path_to_videos.txt","r")
+    path ="/home/uav/var_img.jpeg"
+    video_paths = open("/home/uav/models/research/path_to_videos.txt","r")
     num_videos = 0
 
     for video_path in video_paths:
@@ -177,13 +179,12 @@ def main(_):
     start = time.time()
     for video_path in video_paths:
         ret = True
-        step = 3
+        step = 5
         frame_number = 0
         video_number +=1
         video_path = video_path.replace("\n","")
         cap = cv2.VideoCapture(video_path)
-        print(video_path)
-        annotation_file_path = "/media/ayush/Extra/The_Eternal_Dataset/annotations/"+ video_path.split("/")[6] + "/" + video_path.split("/")[7] + "/" + "annotations.txt"
+        annotation_file_path = "/home/uav/annotations/"+ video_path.split("/")[4] + "/" + video_path.split("/")[5] + "/" + "annotations.txt"
         file_stream = open(annotation_file_path,"r")
         print("="*30)
         print("Reading from {}".format(video_path))
@@ -200,21 +201,20 @@ def main(_):
             cv2.imwrite(path , frame)
 
             for line in file_stream:
-                if(int(line.split(",")[5]) <= frame_number):
+                if(int(line.split(" ")[5]) <= frame_number):
 
-                    if(int(line.split(",")[5]) == frame_number):
+                    if(int(line.split(" ")[5]) == frame_number):
                         examples_per_frame.append(line)
                 else:
                     tf_example = create_tf_example(examples_per_frame , cap , path)
                     # os.system("rm /media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg")
                     writer.write(tf_example.SerializeToString())
                     break
-            if(int((frame_number/cap.get(7))*100) % 5 ==0):
-                print("Video no. {} percentage {} , ".format(video_number,int((frame_number/cap.get(7))*100)) , end ='\r')
+            print("Video no. {} percentage {} , ".format(video_number,((frame_number/cap.get(7))*100)) , end ='\r')
 
 
         print("{} is done moving on to the next video".format(video_path))
-        os.system("rm /media/ayush/Extra/The_Eternal_Dataset/var_img.jpeg")
+        os.system("rm /home/uav/var_img.jpeg")
 
     end = time.time()
     print("Total time taken = {} minutes".format((end-start)/60))
