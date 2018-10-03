@@ -1,5 +1,0 @@
-/media/ayush/Extra/The_Eternal_Dataset/Videos/deathCircle/video0/video.mov
-/media/ayush/Extra/The_Eternal_Dataset/Videos/deathCircle/video1/video.mov
-/media/ayush/Extra/The_Eternal_Dataset/Videos/deathCircle/video2/video.mov
-/media/ayush/Extra/The_Eternal_Dataset/Videos/deathCircle/video3/video.mov
-/media/ayush/Extra/The_Eternal_Dataset/Videos/deathCircle/video4/video.mov
