@@ -1,9 +1,0 @@
-catkin-pkg
-catkin-tools
-rosdep
-rosinstall_generator
-wstool
-rosinstall
-trollius
-empy
-pyqt5==5.10.1
